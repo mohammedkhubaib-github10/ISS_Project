@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <title>Login Page</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+
+</head>
+
+<body>
+
+    <div class="container" id="container">
+        <div class="form-container sign-up">
+            <form id="signupform">
+                <h1>Create Account</h1>
+                <input type="text" id="nameinput" placeholder="Name">
+                <input type="email" id="emailinputsignup" placeholder="Email">
+                <div class="password">
+                    <div class="passimg" onclick="inimg(this)" id="s01"><img src="images\10.png" alt="" class="patimg">
+                    </div>
+                    <div class="passimg" onclick="inimg(this)" id="s02"><img src="images\11.png" alt="" class="patimg">
+                    </div>
+                    <div class="passimg" onclick="inimg(this)" id="s03"><img src="images\12.png" alt="" class="patimg">
+                    </div>
+                    <div class="passimg" onclick="inimg(this)" id="s04"><img src="images\13.png" alt="" class="patimg">
+                    </div>
+                    <div class="passimg" onclick="inimg(this)" id="s05"><img src="images\14.png" alt="" class="patimg">
+                    </div>
+                    <div class="passimg" onclick="inimg(this)" id="s06"><img src="images\15.png" alt="" class="patimg">
+                    </div>
+                    <div class="passimg" onclick="inimg(this)" id="s07"><img src="images\16.png" alt="" class="patimg">
+                    </div>
+                    <div class="passimg" onclick="inimg(this)" id="s08"><img src="images\17.png" alt="" class="patimg">
+                    </div>
+                    <div class="passimg" onclick="inimg(this)" id="s09"><img src="images\18.png" alt="" class="patimg">
+                    </div>
+                    <div class="passimg" onclick="inimg(this)" id="s10"><img src="images\19.png" alt="" class="patimg">
+                    </div>
+                    <div class="passimg" onclick="inimg(this)" id="s11"><img src="images\20.png" alt="" class="patimg">
+                    </div>
+                    <div class="passimg" onclick="inimg(this)" id="s12"><img src="images\21.png" alt="" class="patimg">
+                    </div>
+                    <div class="passimg" onclick="inimg(this)" id="s13"><img src="images\22.png" alt="" class="patimg">
+                    </div>
+                    <div class="passimg" onclick="inimg(this)" id="s14"><img src="images\23.png" alt="" class="patimg">
+                    </div>
+                    <div class="passimg" onclick="inimg(this)" id="s15"><img src="images\24.png" alt="" class="patimg">
+                    </div>
+                </div>
+                <button type="submit">Sign Up</button>
+            </form>
+        </div>
+        <div class="form-container sign-in">
+            <form id="signInForm"> <!-- Add an ID to the form -->
+                <h1>Sign In</h1>
+                <input type="email" id="emailInput" placeholder="Email"> <!-- Add an ID to the email input -->
+
+                <div class="password">
+                    <!-- Add passimg class to each image for JS recognition -->
+                    <div class="passimg" onclick="inimg(this)" id="s01"><img src="images/10.png" alt="password image"
+                            class="patimg"></div>
+                    <div class="passimg" onclick="inimg(this)" id="s02"><img src="images/11.png" alt="password image"
+                            class="patimg"></div>
+                    <div class="passimg" onclick="inimg(this)" id="s03"><img src="images/12.png" alt="password image"
+                            class="patimg"></div>
+                    <div class="passimg" onclick="inimg(this)" id="s04"><img src="images/13.png" alt="password image"
+                            class="patimg"></div>
+                    <div class="passimg" onclick="inimg(this)" id="s05"><img src="images/14.png" alt="password image"
+                            class="patimg"></div>
+                    <div class="passimg" onclick="inimg(this)" id="s06"><img src="images/15.png" alt="password image"
+                            class="patimg"></div>
+                    <div class="passimg" onclick="inimg(this)" id="s07"><img src="images/16.png" alt="password image"
+                            class="patimg"></div>
+                    <div class="passimg" onclick="inimg(this)" id="s08"><img src="images/17.png" alt="password image"
+                            class="patimg"></div>
+                    <div class="passimg" onclick="inimg(this)" id="s09"><img src="images/18.png" alt="password image"
+                            class="patimg"></div>
+                    <div class="passimg" onclick="inimg(this)" id="s10"><img src="images/19.png" alt="password image"
+                            class="patimg"></div>
+                    <div class="passimg" onclick="inimg(this)" id="s11"><img src="images/20.png" alt="password image"
+                            class="patimg"></div>
+                    <div class="passimg" onclick="inimg(this)" id="s12"><img src="images/21.png" alt="password image"
+                            class="patimg"></div>
+                    <div class="passimg" onclick="inimg(this)" id="s13"><img src="images/22.png" alt="password image"
+                            class="patimg"></div>
+                    <div class="passimg" onclick="inimg(this)" id="s14"><img src="images/23.png" alt="password image"
+                            class="patimg"></div>
+                    <div class="passimg" onclick="inimg(this)" id="s15"><img src="images/24.png" alt="password image"
+                            class="patimg"></div>
+                </div>
+
+                <button type="submit">Sign In</button> <!-- Submit button for the form -->
+            </form>
+        </div>
+
+        <div class="toggle-container">
+            <div class="toggle">
+                <div class="toggle-panel toggle-left">
+                    <h1>Hi👋,there!</h1>
+                    <p>Enter your personal details and start journey with us</p>
+                    <button class="hidden" id="login">Sign In</button>
+                </div>
+                <div class="toggle-panel toggle-right">
+                    <h1>Welcome Back!</h1>
+                    <p>To keep connected with us please login with your personal info</p>
+                    <button class="hidden" id="register">Sign Up</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
