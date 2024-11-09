@@ -58,7 +58,16 @@ document.getElementById('signupform').addEventListener('submit', function(event)
     if (userExists) {
         alert("An account with this email already exists.");
     } else {
-        users.push({ name: nameInput, email: emailInput, hashedencryptedPassword,salt});
+        alert(`Register your fingerprint`)
+        registerFingerprint(emailInput).then(fingerprintData => {
+            const credentialId=fingerprintData.id;
+            users.push({ 
+                name: nameInput, 
+                email: emailInput, 
+                hashedencryptedPassword, 
+                salt,
+                fingerprintCredentialId: Array.from(credentialId)
+            });
         localStorage.setItem('users', JSON.stringify(users));
         
         alert("Account created successfully! You can now log in.");
@@ -66,10 +75,13 @@ document.getElementById('signupform').addEventListener('submit', function(event)
         event.target.reset();
         resetPasswordOrder();
         setTimeout(() => container.classList.remove("active"), 1000);
+    }).catch(error => {
+        alert("Fingerprint registration failed: " + error.message);
+    });
     }
 });
 
-document.getElementById('signInForm').addEventListener('submit', function(event) {
+document.getElementById('signInForm').addEventListener('submit', async function(event) {
     event.preventDefault();
 
     const emailInput = document.getElementById('emailInput').value.trim();
@@ -84,8 +96,8 @@ document.getElementById('signInForm').addEventListener('submit', function(event)
     const matchingUser = users.find(user => user.email === emailInput);
 
     if (matchingUser && decryptAndCompare(matchingUser.hashedencryptedPassword, passwordOrder,matchingUser.salt)) {
-        alert(`Login successful! Welcome, ${matchingUser.name}.`);
-        NewTab();
+        alert(`Need Fingerprint!`)
+        await fingerprintAuthentication(matchingUser);
     } else {
         alert("Invalid email or password. Please try again.");
     }
@@ -94,4 +106,71 @@ document.getElementById('signInForm').addEventListener('submit', function(event)
 });
 function NewTab(){
     window.location.href="home.html";
+}
+async function fingerprintAuthentication(matchingUser) {
+    try {
+        const challenge = new Uint8Array(32);
+        crypto.getRandomValues(challenge);
+
+        const publicKeyOptions = {
+            challenge: challenge,
+            allowCredentials: [{
+                type: "public-key",
+                id: new Uint8Array(matchingUser.fingerprintCredentialId)
+            }],
+            userVerification: "required",
+            timeout: 60000
+        };
+
+        const assertion = await navigator.credentials.get({ publicKey: publicKeyOptions });
+
+        if (assertion) {
+            alert("Fingerprint authentication successful!");
+            alert(`Login successful! Welcome, ${matchingUser.name}.`);
+            NewTab();
+        }
+    } catch (err) {
+        console.error("Fingerprint login failed:", err);
+        alert("Fingerprint authentication failed.");
+    }
+}
+async function registerFingerprint(emailInput) {
+    try {
+        // Check if WebAuthn API is available in the browser
+        if (!window.PublicKeyCredential) {
+            throw new Error("WebAuthn is not supported by this browser.");
+        }
+
+        // Generate a random challenge
+        const challenge = new Uint8Array(32);
+        crypto.getRandomValues(challenge);
+
+        // WebAuthn public key options for fingerprint registration
+        const publicKeyOptions = {
+            rp: { name: "Your App Name" },
+            user: {
+                id: new TextEncoder().encode(emailInput),  // Use the email as the unique user ID
+                name: emailInput,  // Email or username
+                displayName: "User Name"  // Display name (could be the user's name)
+            },
+            pubKeyCredParams: [
+                { type: "public-key", alg: -7 }  // ES256 algorithm (public key algorithm with SHA-256)
+            ],
+            challenge: challenge,
+            authenticatorSelection: {
+                authenticatorAttachment: "platform",  // Use built-in fingerprint scanner
+                userVerification: "required"
+            },
+            timeout: 60000,
+            attestation: "direct"
+        };
+
+        // Register using WebAuthn API
+        const credential = await navigator.credentials.create({ publicKey: publicKeyOptions });
+        return credential;  // Return the registered credential data
+
+    } catch (error) {
+        console.error("Fingerprint registration failed:", error);
+        throw new Error("Fingerprint registration failed.");
+    }
 }
